@@ -1,0 +1,49 @@
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
+# Substitua pelo seu token do @BotFather
+TOKEN = '8397641724:AAGzZE3QNi8p23qxkX3ruhipZ4W4ZdOPrMY
+'
+
+def start(update, context):
+    update.message.reply_text("Olá! Eu sou o seu assistente. Digite algo para conversarmos!")
+
+def responder(update, context):
+    # Pegamos o texto e transformamos em minúsculas para facilitar a comparação
+    texto_usuario = update.message.text.lower()
+
+    # --- LISTA DE RESPOSTAS AUTOMÁTICAS ---
+    
+    if "oi" in texto_usuario or "olá" in texto_usuario:
+        resposta = "Olá! Como posso ajudar você hoje?"
+        
+    elif "quem é você" in texto_usuario:
+        resposta = "Eu sou um robô criado no Pydroid 3 para te ajudar!"
+        
+    elif "horas" in texto_usuario:
+        resposta = "Ainda estou aprendendo a ver as horas, mas sei que agora é o momento de programar!"
+        
+    elif "ajuda" in texto_usuario:
+        resposta = "Você pode me perguntar quem eu sou ou simplesmente me dar um 'oi'."
+    
+    else:
+        # Resposta padrão caso ele não entenda a palavra
+        resposta = f"Interessante! Você disse: '{update.message.text}'. Eu ainda estou a aprender novas palavras!"
+
+    # Faz o robô enviar a resposta escolhida
+    update.message.reply_text(resposta)
+
+def main():
+    updater = Updater(TOKEN)
+    dp = updater.dispatcher
+
+    dp.add_handler(CommandHandler("start", start))
+    
+    # O MessageHandler agora usa a nossa lógica de respostas personalizadas
+    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, responder))
+
+    print("O robô está ativo e pronto para conversar!")
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
